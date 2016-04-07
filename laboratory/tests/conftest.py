@@ -2,7 +2,7 @@ import pytest
 import factory
 from pytest_factoryboy import register
 from factory.alchemy import SQLAlchemyModelFactory
-from laboratory.fooflask import configure_app, configure_db, Personne, bind_db_to_app
+from fooflask import app as fooapp, configure_app, configure_db, Personne
 from sqlalchemy.orm import sessionmaker
 
 
@@ -12,13 +12,13 @@ from sqlalchemy.orm import sessionmaker
 
 @pytest.fixture(scope='session')
 def app():
-    return configure_app()
+    app = configure_app()
+    return fooapp
 
 @pytest.yield_fixture(scope='function', autouse=True)
 def db_session(app):
     db = configure_db()
-    bind_db_to_app(db, app)
-    Session = sessionmaker(bind=db.engine)
+    Session = sessionmaker(bind=db)
     session = Session()
     session.begin_nested()
     yield session

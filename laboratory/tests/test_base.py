@@ -10,6 +10,8 @@ def test_base(client):
 def test_add(db_session, client):
     r = client.get(url_for('add', name='test'))
     r = client.get(url_for('hello'))
+    import wdb
+    wdb.set_trace()
     assert r.status_code == 200
     assert 'moi' in r.data.decode('utf-8')
     assert 'test' in r.data.decode('utf-8')
